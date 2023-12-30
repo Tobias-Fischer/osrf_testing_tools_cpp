@@ -15,17 +15,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   -Wshadow -Wnon-virtual-dtor)
 endif()
 
-add_subdirectory(src)
-
-include(CTest)
-if(BUILD_TESTING)
-  include(cmake/osrf_testing_tools_cpp_require_googletest.cmake)
-  # ensures target gtest_main exists
-  osrf_testing_tools_cpp_require_googletest(VERSION_GTE 1.10
-    VENDOR_DIR "${CMAKE_SOURCE_DIR}/vendor")
-
-  add_subdirectory(test)
+if (EMSCRIPTEN)
+  set(CMAKE_CXX_FLAGS "-pthread ${CMAKE_CXX_FLAGS}")
 endif()
+
+add_subdirectory(src)
 
 configure_file(osrf_testing_tools_cppConfig.cmake.in
   "${PROJECT_BINARY_DIR}/osrf_testing_tools_cppConfig.cmake" @ONLY)
